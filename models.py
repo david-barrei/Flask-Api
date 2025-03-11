@@ -14,9 +14,9 @@ class Pokedex(db.Model):
     numero: Mapped[int] = mapped_column()
     tipo: Mapped[str] = mapped_column()
     
-    evolucion = db.relationship('evolucion')
-    ataque = db.relationship('ataque')
-    Caracteristica = db.relationship('caracteristica')
+    evolucion = db.relationship('Evolucion')
+    ataque = db.relationship('Ataque')
+    Caracteristica = db.relationship('Caracteristica')
 
 class Evolucion(db.Model):
     __tablename__ = 'evolucion'
@@ -28,7 +28,7 @@ class Evolucion(db.Model):
     evolucion3: Mapped[str] = mapped_column()
     pokemon_id:Mapped[int]=mapped_column(ForeignKey('pokedex.id'))
 
-    ataque = db.relationship('ataque')
+    ataque = db.relationship('Ataque')
 
 class Ataque(db.Model):
     __tablename__ = 'ataque'
@@ -38,17 +38,18 @@ class Ataque(db.Model):
     velocidad: Mapped[int] = mapped_column()
     ataque_especial:Mapped[str] = mapped_column()
     poke_id: Mapped[int]=mapped_column(ForeignKey('pokedex.id'))
-    evolucion: Mapped[int]=mapped_column(ForeignKey('evolucion.id'))
-
-    debilidad = db.relationship('debilidad')
+    evo_id: Mapped[int]=mapped_column(ForeignKey('evolucion.id'))
+    debilidad_id: Mapped[int] = mapped_column(ForeignKey('debilidad.id')) 
+    
+    debilidad = db.relationship('Debilidad')
 
 class Debilidad(db.Model):
     __tablename__= 'debilidad'
 
     id:Mapped[int] = mapped_column(primary_key=True)
-    devilidad1:Mapped[str] = mapped_column()
-    devilidad2:Mapped[str] = mapped_column()
-    devilidad3:Mapped[str] = mapped_column()
+    debilidad1:Mapped[str] = mapped_column()
+    debilidad2:Mapped[str] = mapped_column()
+    debilidad3:Mapped[str] = mapped_column()
 
 class Caracteristica(db.Model):
     __tablename__ = 'caracteristica'
