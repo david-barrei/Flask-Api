@@ -13,10 +13,19 @@ class Pokedex(db.Model):
     nombre: Mapped[str] = mapped_column(nullable=False)
     numero: Mapped[int] = mapped_column()
     tipo: Mapped[str] = mapped_column()
-    
+    # relaciones
     evolucion = db.relationship('Evolucion')
     ataque = db.relationship('Ataque')
     Caracteristica = db.relationship('Caracteristica')
+
+    def serializer(self):
+        return{
+            "id":self.id,
+            "nombre":self.nombre,
+            "numero":self.numero,
+            "tipo":self.tipo
+        }
+
 
 class Evolucion(db.Model):
     __tablename__ = 'evolucion'
@@ -30,6 +39,17 @@ class Evolucion(db.Model):
 
     ataque = db.relationship('Ataque')
 
+
+    def serializer(self):
+        return{
+            "id":self.id,
+            "nameEvo":self.nameEvo,
+            "evolucion1":self.evolucion1,
+            "evolucion2":self.evolucion2,
+            "evolucion3":self.evolucion3,
+            "pokemon_id":self.pokemon_id
+        }
+
 class Ataque(db.Model):
     __tablename__ = 'ataque'
 
@@ -40,7 +60,7 @@ class Ataque(db.Model):
     poke_id: Mapped[int]=mapped_column(ForeignKey('pokedex.id'))
     evo_id: Mapped[int]=mapped_column(ForeignKey('evolucion.id'))
     debilidad_id: Mapped[int] = mapped_column(ForeignKey('debilidad.id')) 
-    
+
     debilidad = db.relationship('Debilidad')
 
 class Debilidad(db.Model):
