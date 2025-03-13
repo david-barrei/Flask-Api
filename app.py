@@ -20,6 +20,18 @@ def get_a_pokemon(poke_id):
     
     return jsonify(pokemon.serializer()), 200
 
+@app.route('/evolucion/list')
+def get_all_evolucion():
+    evolucions = Evolucion.query.all()
+    evolucions = list(map(lambda evolucion: evolucion.serializer(), evolucions))
+    return jsonify(evolucions), 200
+
+@app.route('/evolucion/<int:evo_id>')
+def get_a_evolucion(evo_id):
+    evolucion = Evolucion.query.filter_by(id=evo_id).first()
+    
+    return jsonify(evolucion.serializer()), 200
+
 
 @app.route('/pokemon',methods=['POST'])
 def create_pokemon():
@@ -56,13 +68,37 @@ def create_evolucion():
     ),200
 
 
+@app.route('/pokemon_delete/<int:poke_id>', methods=[ "DELETE"])
+def delete_pokemon(poke_id):
+    if request.method == 'DELETE':
+        pokemon = Pokedex.query.get(poke_id)
+        if pokemon is None:
+            return jsonify({
+                'mensaje': 'Pokemon no encontrado'
+            }), 404
+        else:
+            db.session.delete(pokemon)
+            db.session.commit()
 
-@app.route('/evolucion/<int:evo_id>')
-def get_a_evolucion(evo_id):
-    evolucion = Evolucion.query.filter_by(id=evo_id).first()
-    
-    return jsonify(evolucion.serializer()), 200
+            return jsonify({
+                "mensaje":"Pokemon eliminado"
+            }), 200
 
+@app.route('/evolucion_delete/<int:evo_id>', methods=[ "DELETE"])
+def delete_Evolucion(evo_id):
+    if request.method == 'DELETE':
+        evolucion = Evolucion.query.get(evo_id)
+        if evolucion is None:
+            return jsonify({
+                'mensaje': 'Evolucion no encontrado'
+            }), 404
+        else:
+            db.session.delete(evolucion)
+            db.session.commit()
+
+            return jsonify({
+                "mensaje":"Evolucion eliminado"
+            }), 200
 
 
 if __name__=="__main__":
